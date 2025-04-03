@@ -127,12 +127,27 @@ body {
 
 
 
-html {
+/* html {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+html::-webkit-scrollbar {
+  display: none; 
+} */
+
+
+/* scrollbar-vanish-subBranch is customized----------- */
+html,
+.scrollbar-vanish-subBranch {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }
-html::-webkit-scrollbar {
+
+/* scrollbar-vanish-subBranch is customized----------- */
+html::-webkit-scrollbar,
+.scrollbar-vanish-subBranch::-webkit-scrollbar { 
   display: none; /* Chrome, Safari, Opera */
 }
+
 
 
