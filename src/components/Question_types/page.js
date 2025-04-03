@@ -24,7 +24,7 @@ function Question_Types({ sec_name, parts = [] }) {
           </section>
     
           {/* Button Section */}
-          <section className="w-full h-[43vh] bg-black text-white pt-12 px-8">
+          <section className="w-full h-auto bg-black text-white pt-12 pb-12 px-8">
             <h1 className="text-center text-3xl md:text-4xl font-bold text-yellow-500">
               Choose on which area you want to
             </h1>
@@ -42,7 +42,7 @@ function Question_Types({ sec_name, parts = [] }) {
                       .replace(/\s+/g, "-")
                       .replace(/\//g, "-")}`
                   )}
-                  className="px-8 py-5 bg-red-800 text-white font-bold text-2xl rounded-lg hover:bg-red-700 hover:text-black transition transform hover:scale-110 cursor-pointer"
+                  className="px-8 py-3 bg-red-800 text-white font-bold text-2xl rounded-lg hover:bg-red-700 hover:text-black transition transform hover:scale-110 cursor-pointer"
                 >
                   {part}
                 </button>

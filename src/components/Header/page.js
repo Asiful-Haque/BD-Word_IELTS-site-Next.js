@@ -12,11 +12,11 @@ const Header = () => {
   return (
     <div className="font-sans">
       {/* Navbar */}
-      <nav className="flex justify-between items-center p-8 bg-[#253D2C] shadow-md">
+      <nav className="flex justify-between items-center p-4 bg-[#253D2C] shadow-md">
         <h1 className="text-4xl font-bold text-lime-500">
           Oinia<span className="text-white">IELTS</span>
         </h1>
-        <ul className="hidden md:flex space-x-6 text-white text-2xl">
+        <ul className="hidden md:flex space-x-6 text-white text-xl">
           <li className="hover:text-yellow-500 cursor-pointer">Home</li>
           <li className="hover:text-yellow-500 cursor-pointer">Languages</li>
           <li className="hover:text-yellow-500 cursor-pointer">Services</li>

@@ -11,7 +11,7 @@ import { FaBook, FaHeadphones, FaPen, FaMicrophone } from "react-icons/fa";
 // #253D2C
 // #17252A
 // #2B7A78
-// #3AAFA9
+// #3AAFA9 1
 
 const Home = () => {
   const router = useRouter();
