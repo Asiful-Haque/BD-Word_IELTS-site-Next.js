@@ -1,31 +1,3 @@
-// import React, { useState, useEffect } from "react";
-
-// const Timer = ({ minutes }) => {
-//     const [timeLeft, setTimeLeft] = useState(minutes * 60); // Convert minutes to seconds
-
-//     useEffect(() => {
-//         if (timeLeft <= 0) return;
-
-//         const interval = setInterval(() => {
-//             setTimeLeft((prevTime) => prevTime - 1);
-//         }, 1000);
-
-//         return () => clearInterval(interval);
-//     }, [timeLeft]);
-
-//     const formatTime = (seconds) => {
-//         const mins = Math.floor(seconds / 60);
-//         const secs = seconds % 60;
-//         return `${mins}:${secs.toString().padStart(2, "0")}`;
-//     };
-
-//     return <div className="p-5 m-auto text-xl font-bold">Time Left: {formatTime(timeLeft)}</div>;
-// };
-
-// export default Timer;
-
-
-
 import React from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
