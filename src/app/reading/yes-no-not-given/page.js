@@ -4,7 +4,7 @@ import LeftPart from "@/components/LeftPart";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
-function TFNGPage() {
+function YNNGPage() {
   const [passageDataBackend, setPassageDataBackend] = useState(null);
   const [passageTitleDataBackend, setPassageTitleDataBackend] = useState(null);
   const [questionsData, setQuestionsData] = useState([]);
@@ -13,7 +13,7 @@ function TFNGPage() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/reading/true_false_not_given`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/reading/yes_no_not_given`,
           {
             method: "GET",
             cache: "no-store",
@@ -26,7 +26,8 @@ function TFNGPage() {
         const result = data.result;
         setPassageDataBackend(result.passage);
         setPassageTitleDataBackend(result.title);
-        setQuestionsData(result.questions.true_false_not_given);
+        setQuestionsData(result.questions.yes_no_not_given);
+        console.log("✅ Received from API:", result.questions.yes_no_not_given);
       } catch (error) {
         console.error("Fetch error:", error);
       }
@@ -62,7 +63,7 @@ function TFNGPage() {
         <div className="flex-1 overflow-auto p-4 scrollbar-vanish-subBranch">
           <div className="space-y-4">
             <h1 className="text-3xl text-center font-bold">
-              Write T for True, F for False, NG for Not Given
+              Write Y for Yes, N for No, NG for Not Given
             </h1>
             {questionsData.map((question, index) => (
               <div key={index} className="bg-gray-400 p-4 rounded-lg shadow-md">
@@ -95,4 +96,4 @@ function TFNGPage() {
   );
 }
 
-export default TFNGPage;
+export default YNNGPage;
