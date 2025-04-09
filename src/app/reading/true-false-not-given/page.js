@@ -69,6 +69,7 @@ function TFNGPage() {
                 <p className="font-semibold mb-2">{question.statement}</p>
                 <textarea
                   className="w-full p-2 rounded-md resize-none text-black"
+                  maxLength={2}
                   placeholder="Write your answer here..."
                   value={userAnswers[question.question_id] || ""}
                   onChange={(e) =>

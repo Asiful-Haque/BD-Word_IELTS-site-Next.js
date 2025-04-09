@@ -4,7 +4,7 @@ import LeftPart from "@/components/LeftPart";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
-function YNNGPage() {
+function NoteCompletionPage() {
   const [passageDataBackend, setPassageDataBackend] = useState(null);
   const [passageTitleDataBackend, setPassageTitleDataBackend] = useState(null);
   const [questionsData, setQuestionsData] = useState([]);
@@ -13,7 +13,7 @@ function YNNGPage() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/reading/yes_no_not_given`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/reading/complete_the_notes`,
           {
             method: "GET",
             cache: "no-store",
@@ -26,8 +26,8 @@ function YNNGPage() {
         const result = data.result;
         setPassageDataBackend(result.passage);
         setPassageTitleDataBackend(result.title);
-        setQuestionsData(result.questions.yes_no_not_given);
-        console.log("✅ Received from API:", result.questions.yes_no_not_given);
+        setQuestionsData(result.questions.complete_the_notes.not_more_than_two_words_answers);
+        console.log("✅ Received from API:", result.questions.complete_the_notes.not_more_than_two_words_answers);
       } catch (error) {
         console.error("Fetch error:", error);
       }
@@ -62,19 +62,16 @@ function YNNGPage() {
         {/* Right side - Questions */}
         <div className="flex-1 overflow-auto p-4 scrollbar-vanish-subBranch">
           <div className="space-y-4">
-            <h1 className="text-3xl text-center font-bold">
-              Write Y for Yes, N for No, NG for Not Given
-            </h1>
-            {questionsData.map((question, index) => (
+            <h1 className="text-3xl text-center font-bold">Write Your Answer Here. (Not more than two words)</h1>
+            {questionsData && questionsData.map((question, index) => (
               <div key={index} className="bg-gray-400 p-4 rounded-lg shadow-md">
-                <p className="font-semibold mb-2">{question.statement}</p>
+                <p className="font-semibold mb-2">{question.text}</p>
                 <textarea
                   className="w-full p-2 rounded-md resize-none text-black"
                   placeholder="Write your answer here..."
-                  maxLength={2}
-                  value={userAnswers[question.question_id] || ""}
+                  value={userAnswers[question.notes_id] || ""}
                   onChange={(e) =>
-                    handleAnswerChange(question.question_id, e.target.value)
+                    handleAnswerChange(question.notes_id, e.target.value)
                   }
                 />
               </div>
@@ -97,4 +94,4 @@ function YNNGPage() {
   );
 }
 
-export default YNNGPage;
+export default NoteCompletionPage;
