@@ -27,7 +27,7 @@ function YNNGPage() {
         setPassageDataBackend(result.passage);
         setPassageTitleDataBackend(result.title);
         setQuestionsData(result.questions.yes_no_not_given);
-        console.log("✅ Received from API:", result.questions.yes_no_not_given);
+        // console.log("✅ Received from API:", result.questions.yes_no_not_given);
       } catch (error) {
         console.error("Fetch error:", error);
       }
@@ -44,10 +44,36 @@ function YNNGPage() {
     }));
   };
   const handleSubmit = () => {
-    console.log("Submitted Answers:", userAnswers);
-    alert("Answers submitted!");
+    // console.log("Submitted Answers:", userAnswers);
+    let correctAnswers = 0;
+  
+    for (const [key, value] of Object.entries(userAnswers)) {
+      const correctAnswer = questionsData[key - 1]?.answer?.toLowerCase();  
+      const userAnswer = value?.toLowerCase().trim();  
+  
+      console.log("Correct Answer:", correctAnswer);
+      console.log("User Answer:", userAnswer);
+  
+      let normalizedUserAnswer = userAnswer;
+  
+      if (userAnswer === 'y') {
+        normalizedUserAnswer = 'yes';
+      } else if (userAnswer === 'n') {
+        normalizedUserAnswer = 'no';
+      } else if (userAnswer === 'ng') {
+        normalizedUserAnswer = 'not given';
+      } else if (userAnswer === 'no') {
+        normalizedUserAnswer = 'no';
+      }
+      if (normalizedUserAnswer === correctAnswer) {
+        correctAnswers++;
+      }
+    }
+  
+    alert(`Answers submitted! You got ${correctAnswers} correct.`);
     setUserAnswers({});
   };
+  
 
   return (
     <div>

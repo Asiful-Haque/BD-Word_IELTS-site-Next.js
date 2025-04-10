@@ -45,7 +45,17 @@ function NoteCompletionPage() {
   };
   const handleSubmit = () => {
     console.log("Submitted Answers:", userAnswers);
-    alert("Answers submitted!");
+    let correctAnswers = 0;
+    for (const [key, value] of Object.entries(userAnswers)) {
+      const correctAnswer = questionsData[key - 1]?.answer?.toLowerCase();
+      const userAnswer = value?.toLowerCase().trim();
+      console.log("Correct Answer:", correctAnswer);
+      console.log("User Answer:", userAnswer);
+      if (userAnswer === correctAnswer) {
+        correctAnswers++;
+      }
+    }
+    alert(`Answers submitted! You got ${correctAnswers} correct.`);
     setUserAnswers({});
   };
 
