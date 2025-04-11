@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/Header/page";
 import LeftPart from "@/components/LeftPart";
+import ResultPopup from "@/components/ResultPopUp";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
@@ -42,9 +43,11 @@ function TFNGPage() {
     }));
   };
 
+  const [showResult, setShowResult] = useState(false);
+  const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
 
   const handleSubmit = () => {
-    console.log("Submitted Answers:", userAnswers);
+    // console.log("Submitted Answers:", userAnswers);
     let correctAnswers = 0;
     
     for (const [key, value] of Object.entries(userAnswers)) {
@@ -56,7 +59,9 @@ function TFNGPage() {
         correctAnswers++;
       }
     }
-    alert(`Answers submitted! You got ${correctAnswers} correct.`);
+    // alert(`Answers submitted! You got ${correctAnswers} correct.`);
+    setCorrectAnswerCount(correctAnswers);
+    setShowResult(true);
     setUserAnswers({});
   };
 
@@ -104,6 +109,13 @@ function TFNGPage() {
       <div className="fixed bottom-0 w-full  shadow-md bg-[#6B9D7AFF]">
         <Timer minutes={10} />
       </div>
+      {showResult && (
+    <ResultPopup
+      correctAnswers={correctAnswerCount}
+      total={questionsData.length}
+      onClose={() => setShowResult(false)}
+    />
+  )}
     </div>
   );
 }

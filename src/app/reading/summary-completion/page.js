@@ -10,7 +10,7 @@ function SummaryPage() {
   const [questionsData, setQuestionsData] = useState([]);
   const [instructions, setInstructions] = useState("");
   const [numOfGaps, setNumOfGaps] = useState(0);
-  const [userAnswers, setUserAnswers] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +27,6 @@ function SummaryPage() {
         }
         const data = await response.json();
         const result = data.result;
-        console.log("✅ Received from API:", result);
         setPassageTitleDataBackend(result.title);
         setPassageDataBackend(result.passage);
         setInstructions(result.questions.summary_completion.instruction);
@@ -48,6 +47,8 @@ function SummaryPage() {
     }
   }, [questionsData.summary_text]);
 
+  const [userAnswers, setUserAnswers] = useState([]);
+
   const handleAnswerChange = (index, value) => {
     setUserAnswers((prev) => {
       const updatedAnswers = [...prev];
@@ -58,7 +59,15 @@ function SummaryPage() {
 
   const handleSubmit = () => {
     console.log("Submitted Answers:", userAnswers);
-    alert("Answers submitted!");
+    let correctAnswers = 0;
+    for (let i = 0; i < userAnswers.length; i++) {
+      const userAnswer = userAnswers[i]?.toLowerCase().trim();
+      const correctAnswer = questionsData.answers[(i + 1).toString()]?.toLowerCase();
+      if (userAnswer === correctAnswer) {
+        correctAnswers++;
+      }
+    }
+    alert(`You got ${correctAnswers} correct out of ${userAnswers.length}.`);
     setUserAnswers(new Array(numOfGaps).fill(""));
   };
 

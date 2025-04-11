@@ -44,8 +44,15 @@ function ListSelectionPage() {
   };
 
   const handleSubmit = () => {
-    console.log("Submitted Answers:", userAnswers);
-    alert("Answers submitted!");
+    let correctAnswers = 0;
+    for (let i = 0; i < userAnswers.length; i++) {
+      const userAnswer = userAnswers[i]?.toLowerCase().trim();
+      const correctAnswer = questionsData.correct_options[i]?.toLowerCase();
+      if (userAnswer === correctAnswer) {
+        correctAnswers++;
+      }
+    }
+    alert(`You got ${correctAnswers} correct out of ${userAnswers.length}.`);
     setUserAnswers(["", "", "", "", ""]);
   };
 

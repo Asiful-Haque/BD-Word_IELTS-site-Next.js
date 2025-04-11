@@ -9,7 +9,7 @@ function ListOfHeadingPage() {
   const [passageTitleDataBackend, setPassageTitleDataBackend] = useState(null);
   const [questionsData, setQuestionsData] = useState([]);
   const [randomParagraphs, setRandomParagraphs] = useState([]);
-  const [userAnswers, setUserAnswers] = useState({});
+
 
   // Fetch data
   useEffect(() => {
@@ -49,6 +49,8 @@ function ListOfHeadingPage() {
     fetchData();
   }, []);
 
+  const [userAnswers, setUserAnswers] = useState({});
+
   const getRandomParagraphs = (arr, num = 5) => {
     const shuffled = [...arr].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, num);
@@ -57,14 +59,40 @@ function ListOfHeadingPage() {
   const handleInputChange = (questionId, value) => {
     setUserAnswers((prev) => ({
       ...prev,
-      [questionId]: value.toUpperCase(),
+      [questionId]: value,
     }));
   };
 
+
+  // const handleSubmit = () => {
+  //   console.log("Submitted Answers:", userAnswers);
+  //   let correctAnswers = 0;
+  //   for (const [key, value] of Object.entries(userAnswers)) {
+  //     const correctAnswer = questionsData.paragraphs[key - 1]?.correct_heading?.toLowerCase();
+  //     const userAnswer = value?.toLowerCase().trim();
+  //     console.log("Correct Answer:", correctAnswer);
+  //     console.log("User Answer:", userAnswer);
+  //     if (userAnswer === correctAnswer) {
+  //       correctAnswers++;
+  //     }
+  //   }
+  //   alert(`Answers submitted! You got ${correctAnswers} correct.`);
+  //   setUserAnswers({});
+  // };
+
   const handleSubmit = () => {
-    console.log("Submitted Answers:", userAnswers);
-    alert("Answers submitted!");
+    let correctAnswers = 0;
+    randomParagraphs.forEach((item) => {
+      const correctAnswer = item.correct_heading?.toLowerCase().trim();
+      const userAnswer = userAnswers[item.question_id]?.toLowerCase().trim();
+      if (userAnswer === correctAnswer) {
+        correctAnswers++;
+      }
+    });
+    alert(`Answers submitted! You got ${correctAnswers} correct.`);
+    setUserAnswers({});
   };
+  
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -103,7 +131,7 @@ function ListOfHeadingPage() {
                   <span className="font-bold text-lg">Paragraph {item.paragraph}</span>
                   <input
                     type="text"
-                    maxLength={1}
+                    maxLength={4}
                     value={userAnswers[item.question_id] || ""}
                     onChange={(e) => handleInputChange(item.question_id, e.target.value)}
                     className="border border-gray-400 p-2 rounded w-26 text-center"
