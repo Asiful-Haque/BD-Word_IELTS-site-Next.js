@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/Header/page";
 import LeftPart from "@/components/LeftPart";
+import ResultPopup from "@/components/ResultPopUp";
 import Timer from "@/components/Timer";
 import React, { useEffect, useState } from "react";
 
@@ -57,6 +58,8 @@ function SummaryPage() {
     });
   };
 
+  const [showResult, setShowResult] = useState(false);
+  const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
   const handleSubmit = () => {
     console.log("Submitted Answers:", userAnswers);
     let correctAnswers = 0;
@@ -67,7 +70,8 @@ function SummaryPage() {
         correctAnswers++;
       }
     }
-    alert(`You got ${correctAnswers} correct out of ${userAnswers.length}.`);
+    setCorrectAnswerCount(correctAnswers);
+    setShowResult(true);
     setUserAnswers(new Array(numOfGaps).fill(""));
   };
 
@@ -128,6 +132,13 @@ function SummaryPage() {
       <div className="fixed bottom-0 w-full  shadow-md bg-[#6B9D7AFF]">
         <Timer minutes={10} />
       </div>
+      {showResult && (
+        <ResultPopup
+          correctAnswers={correctAnswerCount}
+          total={userAnswers.length}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 }

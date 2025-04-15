@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/Header/page";
 import LeftPart from "@/components/LeftPart";
+import ResultPopup from "@/components/ResultPopUp";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
@@ -64,21 +65,8 @@ function ListOfHeadingPage() {
   };
 
 
-  // const handleSubmit = () => {
-  //   console.log("Submitted Answers:", userAnswers);
-  //   let correctAnswers = 0;
-  //   for (const [key, value] of Object.entries(userAnswers)) {
-  //     const correctAnswer = questionsData.paragraphs[key - 1]?.correct_heading?.toLowerCase();
-  //     const userAnswer = value?.toLowerCase().trim();
-  //     console.log("Correct Answer:", correctAnswer);
-  //     console.log("User Answer:", userAnswer);
-  //     if (userAnswer === correctAnswer) {
-  //       correctAnswers++;
-  //     }
-  //   }
-  //   alert(`Answers submitted! You got ${correctAnswers} correct.`);
-  //   setUserAnswers({});
-  // };
+  const [showResult, setShowResult] = useState(false);
+const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
 
   const handleSubmit = () => {
     let correctAnswers = 0;
@@ -89,7 +77,8 @@ function ListOfHeadingPage() {
         correctAnswers++;
       }
     });
-    alert(`Answers submitted! You got ${correctAnswers} correct.`);
+    setCorrectAnswerCount(correctAnswers);
+    setShowResult(true);
     setUserAnswers({});
   };
   
@@ -158,6 +147,14 @@ function ListOfHeadingPage() {
       <div className="fixed bottom-0 w-full shadow-md bg-[#6B9D7AFF] z-50">
         <Timer minutes={10} />
       </div>
+
+      {showResult && (
+        <ResultPopup
+          correctAnswers={correctAnswerCount}
+          total={questionsData.headings.length}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 }

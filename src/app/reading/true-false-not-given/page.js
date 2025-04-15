@@ -49,13 +49,13 @@ function TFNGPage() {
   const handleSubmit = () => {
     // console.log("Submitted Answers:", userAnswers);
     let correctAnswers = 0;
-    
+
     for (const [key, value] of Object.entries(userAnswers)) {
-    const correctAnswer = questionsData[key - 1]?.answer?.toLowerCase();
-    const userAnswer = value?.toLowerCase();
-    console.log("Correct Answer:", correctAnswer);
-    console.log("User Answer:", userAnswer);
-      if(userAnswer === correctAnswer[0]) {
+      const correctAnswer = questionsData[key - 1]?.answer?.toLowerCase();
+      const userAnswer = value?.toLowerCase();
+      console.log("Correct Answer:", correctAnswer);
+      console.log("User Answer:", userAnswer);
+      if (userAnswer === correctAnswer[0]) {
         correctAnswers++;
       }
     }
@@ -96,10 +96,11 @@ function TFNGPage() {
               </div>
             ))}
             <div className="flex justify-center mt-6">
-              <button 
-            //   onClick={() => alert("Answers submitted!")}
-              onClick={handleSubmit} 
-              className="bg-[#6B9D7AFF] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#5B956CFF]">
+              <button
+                //   onClick={() => alert("Answers submitted!")}
+                onClick={handleSubmit}
+                className="bg-[#6B9D7AFF] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#5B956CFF]"
+              >
                 Submit Answers
               </button>
             </div>
@@ -110,12 +111,12 @@ function TFNGPage() {
         <Timer minutes={10} />
       </div>
       {showResult && (
-    <ResultPopup
-      correctAnswers={correctAnswerCount}
-      total={questionsData.length}
-      onClose={() => setShowResult(false)}
-    />
-  )}
+        <ResultPopup
+          correctAnswers={correctAnswerCount}
+          total={questionsData.length}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 }

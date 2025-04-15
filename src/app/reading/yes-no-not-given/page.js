@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/Header/page";
 import LeftPart from "@/components/LeftPart";
+import ResultPopup from "@/components/ResultPopUp";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
@@ -43,6 +44,10 @@ function YNNGPage() {
       [questionId]: value,
     }));
   };
+
+  const [showResult, setShowResult] = useState(false);
+  const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
+
   const handleSubmit = () => {
     // console.log("Submitted Answers:", userAnswers);
     let correctAnswers = 0;
@@ -70,7 +75,8 @@ function YNNGPage() {
       }
     }
   
-    alert(`Answers submitted! You got ${correctAnswers} correct.`);
+    setCorrectAnswerCount(correctAnswers);
+    setShowResult(true);
     setUserAnswers({});
   };
   
@@ -119,6 +125,13 @@ function YNNGPage() {
       <div className="fixed bottom-0 w-full  shadow-md bg-[#6B9D7AFF]">
         <Timer minutes={10} />
       </div>
+      {showResult && (
+        <ResultPopup
+          correctAnswers={correctAnswerCount}
+          total={questionsData.length}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 }

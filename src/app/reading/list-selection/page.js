@@ -1,6 +1,7 @@
 "use client";
 import Header from "@/components/Header/page";
 import LeftPart from "@/components/LeftPart";
+import ResultPopup from "@/components/ResultPopUp";
 import Timer from "@/components/Timer";
 import React, { useState, useEffect } from "react";
 
@@ -43,6 +44,9 @@ function ListSelectionPage() {
     setUserAnswers(updatedAnswers);
   };
 
+  const [showResult, setShowResult] = useState(false);
+const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
+
   const handleSubmit = () => {
     let correctAnswers = 0;
     for (let i = 0; i < userAnswers.length; i++) {
@@ -52,7 +56,8 @@ function ListSelectionPage() {
         correctAnswers++;
       }
     }
-    alert(`You got ${correctAnswers} correct out of ${userAnswers.length}.`);
+    setCorrectAnswerCount(correctAnswers);
+    setShowResult(true);
     setUserAnswers(["", "", "", "", ""]);
   };
 
@@ -119,6 +124,13 @@ function ListSelectionPage() {
       <div className="fixed bottom-0 w-full shadow-md bg-[#6B9D7AFF]">
         <Timer minutes={10} />
       </div>
+      {showResult && (
+        <ResultPopup
+          correctAnswers={correctAnswerCount}
+          total={questionsData.length}
+          onClose={() => setShowResult(false)}
+        />
+      )}
     </div>
   );
 }
