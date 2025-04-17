@@ -21,10 +21,14 @@ export default function WritingTaskPage() {
     return data.result;
   }
 
-    const { data: writingTask, isLoading, error, isError } = useQuery({
+    const { data: writingTask, isLoading, error, isError, refetch } = useQuery({
             queryKey: ["writingTask"],
             queryFn: fetchWritingTask,
-        })
+            enabled: false, // Disable automatic refetching on mount
+        });
+        useEffect(() => {
+            refetch();
+          }, []);
 
   const handleChange = (e) => {
     const text = e.target.value;
