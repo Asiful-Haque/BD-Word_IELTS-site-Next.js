@@ -2,32 +2,29 @@
 import Header from "@/components/Header/page";
 import Timer from "@/components/Timer";
 import ResultPopup from "@/components/ResultPopUp";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function WritingTaskPage() {
-  const [writingTask, setWritingTask] = useState(null);
+//   const [writingTask, setWritingTask] = useState(null);
   const [writingAnswer, setWritingAnswer] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [wordCount, setWordCount] = useState(0);
 
-  useEffect(() => {
-    const fetchWritingTask = async () => {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/writing/part1`, {
-          method: "GET",
-          cache: "no-store",
-        });
-        if (!response.ok) throw new Error("Failed to fetch task");
+  const fetchWritingTask = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/writing/part1`, {
+      method: "GET",
+      cache: "no-store",
+    });
+    if (!response.ok) throw new Error("Failed to fetch task");
+    const data = await response.json();
+    return data.result;
+  }
 
-        const data = await response.json();
-        setWritingTask(data.result);
-      } catch (error) {
-        console.error("Fetch error:", error);
-      }
-    };
-
-    fetchWritingTask();
-  }, []);
+    const { data: writingTask, isLoading, error, isError } = useQuery({
+            queryKey: ["writingTask"],
+            queryFn: fetchWritingTask,
+        })
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -45,6 +42,8 @@ export default function WritingTaskPage() {
     console.log("Submitted Writing Answer:", writingAnswer);
   };
 
+  if (isLoading) return <div className="p-8">Loading task...</div>;
+  if (isError) return <div className="p-8">Error loading task.</div>;
   return (
     <div className="h-screen flex flex-col">
       <Header />

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
+    "@tanstack/react-query": "^5.74.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.2",
@@ -21,7 +22,6 @@
     "react-confetti": "^6.4.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^19.1.0",
-    "react-floating-balloons": "^3.0.2",
     "react-icons": "^5.5.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.4"
