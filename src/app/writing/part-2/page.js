@@ -7,10 +7,10 @@ import Timer from "@/components/Timer";
 
 import WritingTask from "@/components/WritingTaskCommon";
 
-export default function WritingTaskPage() {
+export default function WritingTask2Page() {
   
     const fetchWritingTask = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/writing/part1`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/writing/part2`, {
         method: "GET",
         cache: "no-store",
       });
@@ -32,12 +32,8 @@ export default function WritingTaskPage() {
   
     useEffect(() => {
       refetch();
-    }, []);
+    }, [refetch]);
   
-    const handleAnswerSubmit = (answer) => {
-      console.log("Answer submitted:", answer);
-      setShowResult(true);
-    };
   
     if (isLoading) return <div className="p-8">Loading task...</div>;
     if (isError) return <div className="p-8">Error loading task.</div>;
@@ -51,16 +47,14 @@ export default function WritingTaskPage() {
               <WritingTask
                 taskType={writingTask.task_type}
                 question={writingTask.question}
-                graphImageUrl={writingTask.graph_image_url}
                 topics={writingTask.topics}
-                onAnswerSubmit={handleAnswerSubmit}
               />
             )}
           </div>
         </div>
   
         <div className="fixed bottom-0 w-full shadow-md bg-[#6B9D7AFF]">
-          <Timer minutes={20} />
+          <Timer minutes={40} />
         </div>
       </div>
     );

@@ -59,7 +59,8 @@ const Home = () => {
             </h4>
           </div>
 
-          <div className="cursor-pointer p-20 bg-yellow-500 rounded-lg text-center transform transition-transform hover:scale-110 hover:shadow-2xl hover:bg-yellow-400 duration-500">
+          <div onClick={() => router.push("/writing")} 
+          className="cursor-pointer p-20 bg-yellow-500 rounded-lg text-center transform transition-transform hover:scale-110 hover:shadow-2xl hover:bg-yellow-400 duration-500">
             <FaPen size={80} className="mx-auto" />
             <h4 className="font-bold mt-4 text-black text-xl">Writing</h4>
           </div>

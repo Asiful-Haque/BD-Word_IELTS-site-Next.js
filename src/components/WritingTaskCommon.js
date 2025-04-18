@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ResultPopup from "@/components/ResultPopUp";
+import Image from "next/image";
 
 const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
   const [writingAnswer, setWritingAnswer] = useState("");
@@ -13,8 +14,8 @@ const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
   };
 
   const handleSubmit = () => {
-    if (wordCount < 200) {
-      alert("Please write at least 200 words.");
+    if (wordCount > 200) {
+      alert("Please write upto 200 words.");
       return;
     }
 
@@ -28,25 +29,18 @@ const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
       <p className="text-lg font-medium bg-white p-4 rounded shadow">{question}</p>
 
       {graphImageUrl && (
-        <img
-          src={graphImageUrl}
-          alt="Writing Task Graph"
-          className="w-full max-w-3xl mx-auto rounded-lg shadow-md"
-        />
-      )}
-
-      {topics && (
-        <div className="space-x-2">
-          {topics.map((topic, index) => (
-            <span key={index} className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
-              {topic}
-            </span>
-          ))}
-        </div>
+        <Image
+        src={graphImageUrl}
+        alt="Writing Task Graph"
+        width={800}
+        height={300}
+        className="object-contain rounded-lg m-auto pb-6"
+        priority
+      />
       )}
 
       <textarea
-        placeholder="Write your answer here (minimum 200 words)..."
+        placeholder={(taskType === "IELTS Writing Task 1")? "Write at least 200 words." : "Write your essay here(at least 500 words)."}
         rows={12}
         value={writingAnswer}
         onChange={handleChange}
