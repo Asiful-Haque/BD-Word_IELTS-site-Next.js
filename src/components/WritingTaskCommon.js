@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import ResultPopup from "@/components/ResultPopUp";
 import Image from "next/image";
+import WritingFeedbackPopup from "./WritingFeebackPopup";
 
-const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
+const WritingTask = ({ taskType, question, graphImageUrl }) => {
   const [writingAnswer, setWritingAnswer] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [parsed, setParsed] = useState(null);
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -13,14 +14,72 @@ const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
     setWordCount(text.trim().split(/\s+/).length);
   };
 
-  const handleSubmit = () => {
+  // ✅ Extracts only the content inside \boxed{...} with proper brace matching
+  function extractBoxedJson(rawString) {
+    const boxedStart = rawString.indexOf('\\boxed{');
+    if (boxedStart === -1) return null;
+
+    const jsonStart = boxedStart + '\\boxed{'.length;
+    let braceCount = 0;
+    let endIndex = -1;
+
+    for (let i = jsonStart; i < rawString.length; i++) {
+      const char = rawString[i];
+      if (char === '{') {
+        braceCount++;
+      } else if (char === '}') {
+        braceCount--;
+        if (braceCount === 0) {
+          endIndex = i;
+          break;
+        }
+      }
+    }
+
+    if (endIndex === -1) return null; // unmatched braces
+
+    const jsonString = rawString.slice(jsonStart, endIndex + 1); // inclusive of last }
+    return jsonString;
+  }
+
+  const handleSubmit = async () => {
     if (wordCount > 200) {
-      alert("Please write upto 200 words.");
+      alert("Please write up to 200 words.");
       return;
     }
 
-    console.log("User answer:", writingAnswer);
-    setShowResult(true); 
+    try {
+      const response = await fetch("/api/analyze-writing", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          answer: writingAnswer,
+          taskType,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("AI Raw Feedback:", data.feedback);
+
+      let jsonString = extractBoxedJson(data.feedback);
+      if (!jsonString) throw new Error("Invalid or unmatched boxed format");
+
+      console.log("Extracted JSON string:", jsonString);
+      // if(!jsonString.startsWith("{")) {
+      //   jsonString = `{${jsonString}}`;
+      // }
+      console.log("Formatted JSON string finally:", jsonString);
+      const parsedResult = JSON.parse(jsonString);
+      console.log("Parsed object:", parsedResult);
+
+      setParsed(parsedResult);
+      setShowResult(true);
+    } catch (err) {
+      alert("Error submitting writing.");
+      console.error("Submission Error:", err);
+    }
   };
 
   return (
@@ -30,17 +89,21 @@ const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
 
       {graphImageUrl && (
         <Image
-        src={graphImageUrl}
-        alt="Writing Task Graph"
-        width={800}
-        height={300}
-        className="object-contain rounded-lg m-auto pb-6"
-        priority
-      />
+          src={graphImageUrl}
+          alt="Writing Task Graph"
+          width={800}
+          height={300}
+          className="object-contain rounded-lg m-auto pb-6"
+          priority
+        />
       )}
 
       <textarea
-        placeholder={(taskType === "IELTS Writing Task 1")? "Write at least 200 words." : "Write your essay here(at least 500 words)."}
+        placeholder={
+          taskType === "IELTS Writing Task 1"
+            ? "Write at least 200 words."
+            : "Write your essay here (at least 500 words)."
+        }
         rows={12}
         value={writingAnswer}
         onChange={handleChange}
@@ -59,10 +122,10 @@ const WritingTask = ({ taskType, question, graphImageUrl, topics }) => {
         </button>
       </div>
 
-      {showResult && (
-        <ResultPopup
-          correctAnswers={1}
-          total={1}
+      {showResult && parsed && (
+        <WritingFeedbackPopup
+          score={parsed.score}
+          feedback={parsed.feedback}
           onClose={() => setShowResult(false)}
         />
       )}
