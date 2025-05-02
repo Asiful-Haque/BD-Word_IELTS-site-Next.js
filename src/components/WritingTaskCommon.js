@@ -1,12 +1,21 @@
+'use client';
+
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import WritingFeedbackPopup from "./WritingFeebackPopup";
+import ErrorPopup from "./WritingFeedbackError";
+
 
 const WritingTask = ({ taskType, question, graphImageUrl }) => {
   const [writingAnswer, setWritingAnswer] = useState("");
   const [wordCount, setWordCount] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [parsed, setParsed] = useState(null);
+  const [loading, setLoading] = useState(false);  // Add loading state
+  const [error, setError] = useState(null);  // Add state for error message
+  
+  const router = useRouter();  // Initialize useRouter hook
 
   const handleChange = (e) => {
     const text = e.target.value;
@@ -48,6 +57,8 @@ const WritingTask = ({ taskType, question, graphImageUrl }) => {
       return;
     }
 
+    setLoading(true); // Set loading state to true
+
     try {
       const response = await fetch("/api/analyze-writing", {
         method: "POST",
@@ -67,23 +78,26 @@ const WritingTask = ({ taskType, question, graphImageUrl }) => {
       if (!jsonString) throw new Error("Invalid or unmatched boxed format");
 
       console.log("Extracted JSON string:", jsonString);
-      // if(!jsonString.startsWith("{")) {
-      //   jsonString = `{${jsonString}}`;
-      // }
+      if (!jsonString.startsWith("{")) {
+        jsonString = `{${jsonString}}`;
+      }
       console.log("Formatted JSON string finally:", jsonString);
       const parsedResult = JSON.parse(jsonString);
       console.log("Parsed object:", parsedResult);
 
       setParsed(parsedResult);
-      setShowResult(true);
+      setShowResult(true); // Show result after parsing data
     } catch (err) {
-      alert("Error submitting writing.");
-      console.error("Submission Error:", err);
+      // alert("Error submitting writing.");
+      // console.error("Submission Error:", err);
+      setError("An error occurred while submitting your writing. Please try again later.");
+    } finally {
+      setLoading(false); // Set loading state to false after the request is done
     }
   };
 
   return (
-    <div className="flex-1 max-w-4xl mx-auto space-y-6 pb-40">
+    <div className="flex-1 max-w-4xl mx-auto space-y-6 pb-40 relative">
       <h1 className="text-2xl font-bold text-center mb-4">{taskType}</h1>
       <p className="text-lg font-medium bg-white p-4 rounded shadow">{question}</p>
 
@@ -121,6 +135,21 @@ const WritingTask = ({ taskType, question, graphImageUrl }) => {
           Submit Writing
         </button>
       </div>
+
+      {/* Tailwind Loading Spinner as Overlay */}
+      {loading && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-50">
+          <div className="border-t-4 border-b-4 border-green-500 w-16 h-16 rounded-full animate-spin"></div>
+        </div>
+      )}
+
+      {/* Display Error Popup */}
+      {error && (
+        <ErrorPopup
+          message={error}
+          onClose={() => setError(null)}  // Close the error popup
+        />
+      )}
 
       {showResult && parsed && (
         <WritingFeedbackPopup

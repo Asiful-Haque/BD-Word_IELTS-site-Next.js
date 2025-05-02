@@ -12,4 +12,4 @@ function Reading() {
   );
 }
 
-export default Reading;
+export default Reading; 

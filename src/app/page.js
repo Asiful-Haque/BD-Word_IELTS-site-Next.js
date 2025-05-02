@@ -27,7 +27,7 @@ const Home = () => {
           Read More
         </button>
       </header>
-
+ 
       {/* Features Section */}
       <section className="text-center py-30 bg-black">
         <h3 className="text-red-500 font-bold text-6xl mb-6">Start Now</h3>
